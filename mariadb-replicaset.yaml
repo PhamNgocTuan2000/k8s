@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: mariadb-replicaset
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: mariadb
