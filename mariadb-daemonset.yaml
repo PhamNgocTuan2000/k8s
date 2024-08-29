@@ -15,4 +15,4 @@ spec:
         - name: mariadb-container
           image: mariadb:latest
           ports:
-            - containerPort: 3306
+            - containerPort: 8080
