@@ -1,16 +1,17 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: db-daemonset
+  name: db-replicaset
 ---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: ReplicaSet
 metadata:
-  namespace: db-daemonset
-  name: mariadb-daemonset
+  namespace: db-replicaset
+  name: mariadb-replicaset
   labels:
     app: mariadb
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: mariadb
