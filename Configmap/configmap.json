@@ -1,0 +1,5 @@
+{
+    "TYPE": "JSON",
+    "DATABASE_USER": "configmap-test",
+    "DATABASE_PASSWORD": "12345"
+  }
