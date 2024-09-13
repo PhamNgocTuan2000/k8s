@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: db-deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: db-deployment
+  name: mariadb-deployment
+  labels:
+    app: mariadb
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "128m"
+          requests:
+            memory: "128Mi"
+            cpu: "64m"

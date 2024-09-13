@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-volume-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multi-volume-app
+  template:
+    metadata:
+      labels:
+        app: multi-volume-app
+    spec:
+      containers:
+      - name: app-container
+        image: nginx
+        volumeMounts:
+        #ReadWriteOnce volume
+        - name: volume-rwo
+          mountPath: /mnt/rwo
+        #ReadOnlyMany volume
+        - name: volume-rom
+          mountPath: /mnt/rom
+          readOnly: true
+        #ReadWriteMany volume
+        - name: volume-rwm
+          mountPath: /mnt/rwm
+        #ReadWriteOncePod volume
+        - name: volume-rwop
+          mountPath: /mnt/rwop
+      volumes:
+      # PersistentVolumeClaim for ReadWriteOnce (RWO)
+      - name: volume-rwo
+        persistentVolumeClaim:
+          claimName: pvc-rwo
+      # PersistentVolumeClaim for ReadOnlyMany (ROX)
+      - name: volume-rom
+        persistentVolumeClaim:
+          claimName: pvc-rom
+      # PersistentVolumeClaim for ReadWriteMany (RWX)
+      - name: volume-rwm
+        persistentVolumeClaim:
+          claimName: pvc-rwm
+      # PersistentVolumeClaim for ReadWriteOncePod (RWOP)
+      - name: volume-rwop
+        persistentVolumeClaim:
+          claimName: pvc-rwop
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-rwo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-rom
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-rwm
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-rwop
+spec:
+  accessModes:
+    - ReadWriteOncePod
+  resources:
+    requests:
+      storage: 1Gi
